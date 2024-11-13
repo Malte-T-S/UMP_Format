@@ -101,7 +101,7 @@ struct UmpPart
 
 Note that you **must** treat the type field as a variable length integer. The current type numbers are all below 128, which will produce a single-byte encoding, but if you read the type ID as a single byte instead of properly decoding it as a variable length integer your implementation will break if/when new part types are added.
 
-Each HTTP response starts with a "onesie header" part (type 20) followed by any number of other parts.
+Each videoplayback HTTP response **usually** starts with the part types 58, 47, 52, 53, 35 following any number of other part types (sometimes even no further content).
 
 ### Partial parts
 
