@@ -101,7 +101,11 @@ struct UmpPart
 
 Note that you **must** treat the type field as a variable length integer. The current type numbers are all below 128, which will produce a single-byte encoding, but if you read the type ID as a single byte instead of properly decoding it as a variable length integer your implementation will break if/when new part types are added.
 
-Each videoplayback HTTP response **usually** starts with the parts `STREAM_PROTECTION_STATUS` (type 58), `PLAYBACK_START_POLICY` (type 47), `REQUEST_IDENTIFIER` (type 52), `REQUEST_CALCELLATION_POLICY` (type 53), `NEXT_REQUEST_POLICY` (type 35) following any number of other part types (sometimes even no further content).
+Each videoplayback HTTP response **usually** starts with the parts `STREAM_PROTECTION_STATUS` (type 58), `PLAYBACK_START_POLICY` (type 47), `REQUEST_IDENTIFIER` (type 52), `REQUEST_CALCELLATION_POLICY` (type 53), `NEXT_REQUEST_POLICY` (type 35) following any number of other parts (sometimes even no further content).
+
+### Media Parts
+
+When Media is contained in the response the actual media (`MEDIA` type 21) is **usually** preceded by a `MEDIA_HEADER` part (type 21) and followed by `MEDIA_END` (type 22). The `FORMAT_INITIALIZATION_METADATA` (type 42) is send at irregular intervals.
 
 ### Partial parts
 
