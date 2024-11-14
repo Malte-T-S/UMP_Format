@@ -188,15 +188,15 @@ Present at the start of all known UMP response payloads.
 
 The payload is protobufs. So far I've been decoding this manually with https://protobuf-decoder.netlify.app/
 
-- Field 1 is a varint and is always zero.
-- Field 2 is the video ID as a string
-- Field 3 is a varint which matches the `itag` URL parameter.
+- Field 1 is a varint and counts up each header in per response.
+- Field 2 is the video ID as a string.
+- Field 3 is a varint which matches the `itag` URL parameter (parameters do not seem to match any of the itags on https://tyrrrz.me/blog/reverse-engineering-youtube).
 - Field 4 is varint that matches the `lmt` URL parameter, which seems to be a microsecond timestamp related to the last modified time of the stream (likely the time at which encoding completed for a given video stream)
 - Field 6 is a varint that is probably the start of the data range
 - Field 13 is a protobuf message with two fields:
   - Field 1 is the `itag`
   - Field 2 is the `lmt` for the itag.
-- Field 14 is the content length.
+- Field 14 is the content length (without the leading null byte).
 
 Field 14 probably represents the size of the media chunk being sent. If the payload does not end with a partial part, this number has always been observed to match the size of the data in the `MEDIA` part, not including the null byte prefix. When there is a partial part, the number tends to be a fair bit bigger, possibly representing the size of the entire video or chapter. When the video is a livestream, this value is missing, since YouTube has no idea when the stream will end.
 
@@ -272,7 +272,21 @@ Not yet observed.
 
 ### Part 42: FORMAT_INITIALIZATION_METADATA
 
-Unknown purpose and format.
+Contains information about the transmitted video.
+
+- Field 1 is the video ID as a string.
+- Field 2 is a protobuf containing two field equal to the fields 3 and 4 of the `MEDIA_HEADER` (type 20).
+- Field 3 is a varint.
+- Field 4 is a varint.
+- Field 5 is a string and contains information about the data type (e.g. video/webm) and codec.
+- Field 6 is a protobuf.
+  - Field 6-1 is a varint.
+  - Field 6-2 is a varint.
+- Field 7 is a protobuf.
+  - Field 7-1 is a varint.
+  - Field 7-2 is a varint.
+- Field 9 is a varint.
+- Field 10 is a varint.
 
 ### Part 43: SABR_REDIRECT
 
