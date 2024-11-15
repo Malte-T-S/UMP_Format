@@ -188,7 +188,7 @@ Present at the start of all known UMP response payloads.
 
 The payload is protobufs. So far I've been decoding this manually with https://protobuf-decoder.netlify.app/
 
-- Field 1 is a varint and counts up each header in per response.
+- Field 1 is a varint and counts up each header per response.
 - Field 2 is the video ID as a string.
 - Field 3 is a varint which matches the `itag` URL parameter (parameters do not seem to match any of the itags on https://tyrrrz.me/blog/reverse-engineering-youtube).
 - Field 4 is varint that matches the `lmt` URL parameter, which seems to be a microsecond timestamp related to the last modified time of the stream (likely the time at which encoding completed for a given video stream)
